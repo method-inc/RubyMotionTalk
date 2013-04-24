@@ -20,6 +20,9 @@ class InfoViewController < UIViewController
   def viewDidAppear(animated)
     s ||= nnnn
 
+    s << "App's name / identifier:" + n
+    s << "#{App.name} / #{App.identifier}" + nn
+
     s << "Here's a unique ID:" + n
     s << BubbleWrap.create_uuid + nn
 
