@@ -15,7 +15,6 @@ class RedditRssViewController < ProMotion::GroupedTableScreen
   end
 
   def on_appear
-
     @items = []
 
     @feed_parser = BW::RSSParser.new(APIURL)
@@ -39,9 +38,8 @@ class RedditRssViewController < ProMotion::GroupedTableScreen
   end
 
   def table_data
-
     data = [{
-      title: "Top Reddit Articles",
+      title: "Top Reddit Articles:",
       cells: @items
     }]
   end
