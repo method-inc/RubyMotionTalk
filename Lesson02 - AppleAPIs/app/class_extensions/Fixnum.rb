@@ -1,6 +1,6 @@
 class Fixnum
 # You could also extend NSNumber and it would work the same.
-#class NSNumber
+# class NSNumber
 
   def ordinalize
     if (11..13).include?(self % 100)
