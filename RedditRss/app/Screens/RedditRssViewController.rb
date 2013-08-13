@@ -1,24 +1,21 @@
-class RedditRssViewController < ProMotion::GroupedTableScreen
+class RedditRssViewController < ProMotion::TableScreen
+  refreshable
+  searchable
 
   title "RedditRSS"
   APIURL = "http://www.reddit.com/.rss"
 
   def on_load
-    @refresh = UIRefreshControl.alloc.init
-    @refresh.attributedTitle = NSAttributedString.alloc.initWithString("Pull to Refresh")
-    @refresh.addTarget(self, action:'refreshView:', forControlEvents:UIControlEventValueChanged)
-    self.refreshControl = @refresh
+    @items = []
+  end
 
-    on_refresh do
-      on_appear
-    end
+  def on_refresh
+    on_appear
   end
 
   def on_appear
-    @items = []
-
     @feed_parser = BW::RSSParser.new(APIURL)
-    # feed_parser.delegate = self
+    # # feed_parser.delegate = self
     @feed_parser.parse do |item|
       @items << {
         title: item.title,
@@ -27,7 +24,7 @@ class RedditRssViewController < ProMotion::GroupedTableScreen
         action: :tapped_cell,
         arguments: { location: item.link }
       }
-      self.update_table_data
+      update_table_data
       end_refreshing
     end
 
@@ -38,28 +35,10 @@ class RedditRssViewController < ProMotion::GroupedTableScreen
   end
 
   def table_data
-    data = [{
+    [{
       title: "Top Reddit Articles:",
       cells: @items
     }]
   end
-
-  # UIRefreshControl Delegates
-  def refreshView(refresh)
-    refresh.attributedTitle = NSAttributedString.alloc.initWithString("Refreshing data...")
-    @on_refresh.call if @on_refresh
-  end
-
-  def on_refresh(&block)
-    @on_refresh = block
-  end
-
-  def end_refreshing
-    return unless @refresh
-
-    @refresh.attributedTitle = NSAttributedString.alloc.initWithString("Last updated on #{Time.now.strftime("%H:%M:%S")}")
-    @refresh.endRefreshing
-  end
-
 
 end
